@@ -43,26 +43,50 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
+let playerScore = 0;
+let computerScore = 0;
+
 function game(choice) {
     let computerChoice = computerPlay();
     displayResult(playRound(choice, computerChoice), computerChoice);
 }
 
-function displayResult(result, computer) {
-    const gameContainer = document.querySelector('.game');
+const gameContainer = document.querySelector('.game');
+const score = document.createElement('p');
+score.textContent = 'Score: 0 - 0';
+gameContainer.insertBefore(score, gameContainer.firstChild);
 
-    const computerResult = document.createElement('h3');
-    computerResult.classList.add('result-text');
-    computerResult.textContent = (computer === 'Rock')? 'Rock' : (computer === 'Paper') ? 'Paper': 'Scissors';
-    gameContainer.appendChild(computerResult);
+function displayResult(result, computer) {
+    let computerResult = (computer === 'Rock') ? 
+        'Computer chooses Rock.' : (computer === 'Paper') ? 
+        'Computer chooses Paper.': 'Computer chooses Scissors.';
+    
+    let winOrLose = (result === 'win') ? 
+        'You Win!' : (result === 'lose') ? 
+        'You Lose!' : 'Draw!';
 
     const resultText = document.createElement('h3');
     resultText.classList.add('result-text');
-    resultText.textContent = (result === 'win') ? 'You Win!' : (result === 'lose') ? 'You Lose!' : 'Draw!';
+    resultText.textContent = computerResult + " " + winOrLose;
     gameContainer.appendChild(resultText);
+
+    //Update score
+    if (winOrLose === 'You Win!') {
+        playerScore++;
+    }
+    else if (winOrLose == 'You Lose!') {
+        computerScore++;
+    }
+
+    //remove old score
+    let oldScore = gameContainer.firstChild;
+    gameContainer.removeChild(oldScore);
+    //create and insert new score
+    const newScore = document.createElement('p');
+    newScore.classList.add('.score');
+    newScore.textContent = `Score: ${playerScore} - ${computerScore}`;
+    gameContainer.insertBefore(newScore, gameContainer.firstChild);
 }
-
-
 
 const gameButtons = document.querySelectorAll('.game-button');
 
