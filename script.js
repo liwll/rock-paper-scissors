@@ -14,63 +14,87 @@ function computerPlay() {
 
 
 function playRound(playerSelection, computerSelection) {
-    if (playerSelection.toLowerCase() === 'rock') {
-        return rockLogic(computerSelection);
+    if (playerSelection.toLowerCase() === computerSelection.toLowerCase()) {
+        return 'draw';
+    } else if (playerSelection.toLowerCase() === 'rock') {
+        switch (computerSelection) {
+            case 'Paper':
+                return 'lose';
+            case 'Scissors':
+                return 'win';
+        } 
     } else if (playerSelection.toLowerCase() === 'paper') {
-        return paperLogic(computerSelection);
+        switch (computerSelection) {
+            case 'Rock':
+                return 'win';
+            case 'Scissors':
+                return 'lose';
+        }
     } else if (playerSelection.toLowerCase() === 'scissors') {
-        return scissorLogic(computerSelection);
+        switch (computerSelection) {
+            case 'Rock':
+                return 'lose';
+            case 'Paper':
+                return 'win';
+        }
     }
     else {
         return 'Invalid choice, try again.';
     }
 }
 
-function game() {
-    for (let i = 0; i < 5; i++) {
-        console.log(playRound(computerPlay(), computerPlay()));
-    }
+let playerScore = 0;
+let computerScore = 0;
+
+function game(choice) {
+    let computerChoice = computerPlay();
+    displayResult(playRound(choice, computerChoice), computerChoice);
 }
 
-game();
+const gameContainer = document.querySelector('.game');
+const score = document.createElement('p');
+score.textContent = 'Score: 0 - 0';
+gameContainer.insertBefore(score, gameContainer.firstChild);
 
-function rockLogic(opponent) {
-    switch (opponent) {
-        case 'Rock':
-            return 'Rock vs. Rock, it\'s a draw.';
-        case 'Paper':
-            return 'Rock vs. Paper, you lose!';
-        case 'Scissors':
-            return 'Rock vs. Scissors, you win!';
-        default:
-            return "Rock logic failure";
+function displayResult(result, computer) {
+    let computerResult = (computer === 'Rock') ? 
+        'Computer chooses Rock.' : (computer === 'Paper') ? 
+        'Computer chooses Paper.': 'Computer chooses Scissors.';
+    
+    let winOrLose = (result === 'win') ? 
+        'You Win!' : (result === 'lose') ? 
+        'You Lose!' : 'Draw!';
+
+    const resultText = document.createElement('h3');
+    resultText.classList.add('result-text');
+    resultText.textContent = computerResult + " " + winOrLose;
+    gameContainer.appendChild(resultText);
+
+    //Update score
+    if (winOrLose === 'You Win!') {
+        playerScore++;
     }
+    else if (winOrLose == 'You Lose!') {
+        computerScore++;
+    }
+
+    //remove old score
+    let oldScore = gameContainer.firstChild;
+    gameContainer.removeChild(oldScore);
+    //create and insert new score
+    const newScore = document.createElement('p');
+    newScore.classList.add('.score');
+    newScore.textContent = `Score: ${playerScore} - ${computerScore}`;
+    gameContainer.insertBefore(newScore, gameContainer.firstChild);
 }
 
-function paperLogic(opponent) {
-    switch (opponent) {
-        case 'Rock':
-            return 'Paper vs. Rock, you lose!';
-        case 'Paper':
-            return 'Paper vs. Paper, it\'s a draw.';
-        case 'Scissors':
-            return 'Paper vs. Scissors, you win!';
-        default:
-            return "Paper logic failure";
-    }
-}
+const gameButtons = document.querySelectorAll('.game-button');
 
-function scissorLogic(opponent) {
-    switch (opponent) {
-        case 'Rock':
-            return 'Scissors vs. Rock, you lose!';
-        case 'Paper':
-            return 'Scissors vs. Paper, you win!';
-        case 'Scissors':
-            return 'Scissors vs. Scissors, it\'s a draw.';
-        default:
-            return "Scissor logic failure";
-    }
-}
-
+gameButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        let img = button.querySelector("img");
+        let choice = img.alt;
+        game(choice);
+    });
+});
 
