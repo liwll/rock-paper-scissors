@@ -1,25 +1,62 @@
-h1 {
-    display: flex;
-    align-self: baseline;
-    margin: 50px;
-    padding: 25px;
-    border-radius: 10%;
-    background-color: #bbb;
-    max-width: 200px;
-}
-
-
 body {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     display: flex;
     align-items: baseline;
 }
 
+h1 {
+    display: flex;
+    align-self: baseline;
+    margin: 50px;
+    padding: 25px;
+    border-radius: 10%;
+    max-width: 200px;
+    background-color: #000;
+    color: white;
+    font-size: 37px;
+    white-space: normal;
+}
+
+
+.game {
+    padding: 35px;
+}
+
 .game img {
-    max-width: 100px;
+    max-width: 150px;
 }
 
 .game button {
-    border-radius: 50%;
-    border-color: rgba(0, 0, 0, 0);
+    padding: 0px;
+    margin: 30px 10px;
+    border-color: transparent;
+    border-radius: 100%;
+    background-color: transparent;
+}
+
+.score {
+    font-weight: bolder;
+    margin-left: 20px;
+}
+
+.result-text {
+    margin-left: 20px;
+}
+
+.win {
+    color: rgb(0, 237, 0);
+}
+
+.lose {
+    color: red;
+}
+
+.game-over-victory {
+    font-size: 30pt;
+    margin-left: 20px;
+}
+
+.game-over-defeat {
+    font-size: 30pt;
+    margin-left: 20px;
 }
