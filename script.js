@@ -14,63 +14,63 @@ function computerPlay() {
 
 
 function playRound(playerSelection, computerSelection) {
-    if (playerSelection.toLowerCase() === 'rock') {
-        return rockLogic(computerSelection);
+    if (playerSelection.toLowerCase() === computerSelection.toLowerCase()) {
+        return 'draw';
+    } else if (playerSelection.toLowerCase() === 'rock') {
+        switch (computerSelection) {
+            case 'Paper':
+                return 'lose';
+            case 'Scissors':
+                return 'win';
+        } 
     } else if (playerSelection.toLowerCase() === 'paper') {
-        return paperLogic(computerSelection);
+        switch (computerSelection) {
+            case 'Rock':
+                return 'win';
+            case 'Scissors':
+                return 'lose';
+        }
     } else if (playerSelection.toLowerCase() === 'scissors') {
-        return scissorLogic(computerSelection);
+        switch (computerSelection) {
+            case 'Rock':
+                return 'lose';
+            case 'Paper':
+                return 'win';
+        }
     }
     else {
         return 'Invalid choice, try again.';
     }
 }
 
-function game() {
-    for (let i = 0; i < 5; i++) {
-        console.log(playRound(computerPlay(), computerPlay()));
-    }
+function game(choice) {
+    let computerChoice = computerPlay();
+    displayResult(playRound(choice, computerChoice), computerChoice);
 }
 
-game();
+function displayResult(result, computer) {
+    const gameContainer = document.querySelector('.game');
 
-function rockLogic(opponent) {
-    switch (opponent) {
-        case 'Rock':
-            return 'Rock vs. Rock, it\'s a draw.';
-        case 'Paper':
-            return 'Rock vs. Paper, you lose!';
-        case 'Scissors':
-            return 'Rock vs. Scissors, you win!';
-        default:
-            return "Rock logic failure";
-    }
+    const computerResult = document.createElement('h3');
+    computerResult.classList.add('result-text');
+    computerResult.textContent = (computer === 'Rock')? 'Rock' : (computer === 'Paper') ? 'Paper': 'Scissors';
+    gameContainer.appendChild(computerResult);
+
+    const resultText = document.createElement('h3');
+    resultText.classList.add('result-text');
+    resultText.textContent = (result === 'win') ? 'You Win!' : (result === 'lose') ? 'You Lose!' : 'Draw!';
+    gameContainer.appendChild(resultText);
 }
 
-function paperLogic(opponent) {
-    switch (opponent) {
-        case 'Rock':
-            return 'Paper vs. Rock, you lose!';
-        case 'Paper':
-            return 'Paper vs. Paper, it\'s a draw.';
-        case 'Scissors':
-            return 'Paper vs. Scissors, you win!';
-        default:
-            return "Paper logic failure";
-    }
-}
 
-function scissorLogic(opponent) {
-    switch (opponent) {
-        case 'Rock':
-            return 'Scissors vs. Rock, you lose!';
-        case 'Paper':
-            return 'Scissors vs. Paper, you win!';
-        case 'Scissors':
-            return 'Scissors vs. Scissors, it\'s a draw.';
-        default:
-            return "Scissor logic failure";
-    }
-}
 
+const gameButtons = document.querySelectorAll('.game-button');
+
+gameButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        let img = button.querySelector("img");
+        let choice = img.alt;
+        game(choice);
+    });
+});
 
