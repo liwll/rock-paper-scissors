@@ -43,6 +43,8 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
+let gameStarted = false;
+let gameFinished = false;
 let playerScore = 0;
 let computerScore = 0;
 
@@ -52,11 +54,18 @@ function game(choice) {
 }
 
 const gameContainer = document.querySelector('.game');
-const score = document.createElement('p');
+const score = document.createElement('h2');
 score.textContent = 'Score: 0 - 0';
+score.classList.add('score')
 gameContainer.insertBefore(score, gameContainer.firstChild);
 
 function displayResult(result, computer) {
+    if (gameFinished) {
+        return;
+    }
+    gameStarted = true;
+
+    //Print result
     let computerResult = (computer === 'Rock') ? 
         'Computer chooses Rock.' : (computer === 'Paper') ? 
         'Computer chooses Paper.': 'Computer chooses Scissors.';
@@ -68,33 +77,57 @@ function displayResult(result, computer) {
     const resultText = document.createElement('h3');
     resultText.classList.add('result-text');
     resultText.textContent = computerResult + " " + winOrLose;
-    gameContainer.appendChild(resultText);
 
     //Update score
-    if (winOrLose === 'You Win!') {
+    if (result === 'win') {
         playerScore++;
+        resultText.classList.add('win');
     }
-    else if (winOrLose == 'You Lose!') {
+    else if (result == 'lose') {
         computerScore++;
+        resultText.classList.add('lose')
     }
+    gameContainer.appendChild(resultText);
 
     //remove old score
     let oldScore = gameContainer.firstChild;
     gameContainer.removeChild(oldScore);
     //create and insert new score
-    const newScore = document.createElement('p');
-    newScore.classList.add('.score');
+    const newScore = document.createElement('h2');
+    newScore.classList.add('score');
     newScore.textContent = `Score: ${playerScore} - ${computerScore}`;
     gameContainer.insertBefore(newScore, gameContainer.firstChild);
+
+    if (playerScore == 5) {
+        gameFinished = true;
+        const victoryText = document.createElement('p');
+        victoryText.classList.add('game-over-victory');
+        victoryText.textContent = "Victory! You are the Rock, Scissors, Paper Champion!"
+        gameContainer.appendChild(victoryText);
+    }
+    else if (computerScore == 5) {
+        gameFinished = true;
+        const defeatText = document.createElement('p');
+        defeatText.classList.add("game-over-defeat");
+        defeatText.textContent = "Defeat, better luck next time."
+        gameContainer.appendChild(defeatText);
+    }
 }
 
 const gameButtons = document.querySelectorAll('.game-button');
 
 gameButtons.forEach(button => {
     button.addEventListener("click", () => {
+        if (gameFinished) {
+            return;
+        }
+        if (gameStarted) {
+            const oldResults = document.querySelector('h3');
+            gameContainer.removeChild(oldResults);
+        }
+
         let img = button.querySelector("img");
         let choice = img.alt;
         game(choice);
     });
 });
-
