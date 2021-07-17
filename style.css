@@ -1,5 +1,5 @@
 body {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'Nunito', sans-serif;
     display: flex;
     align-items: baseline;
 }
@@ -24,6 +24,7 @@ h1 {
 
 .game img {
     max-width: 150px;
+    cursor: pointer;
 }
 
 .game button {
